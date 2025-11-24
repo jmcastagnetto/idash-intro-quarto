@@ -1,0 +1,554 @@
+---
+title: "Uma introdução ao Quarto"
+date: 2024-08-28
+license: CC BY-NC-SA
+author:
+  - name: Jesus M. Castagnetto, Ph.D.
+    orcid: 0000-0002-7188-1605
+    email: jesus@upch.pe
+    affiliation: INSIGHT Project - Universidad Peruana Cayetano Heredia (UPCH)
+format: 
+  revealjs: 
+    theme: [default, style.scss]
+    transition: slide
+    fontcolor: "#262d36"
+    chalkboard: true
+    highlight-style: a11y
+    code-line-numbers: false
+    self-contained-math: true
+    code-annotations: hover
+    preview-links: true
+    slide-number: true
+    show-slide-number: all
+    logo: images/quarto.png
+    footer: Uma introdução ao Quarto // Jesus M. Castagnetto // INSIGHT - UPCH, 2024
+    pointer:
+      pointersize: 18
+    mermaid-format: png
+    fig-width: 12
+  #pptx: default
+
+lang: pt
+
+revealjs-plugins:
+  - pointer
+  - attribution
+
+---
+
+## Agenda
+
+- O que é Quarto e para que serve?
+- Conceitos básicos de programação literal
+- O que podemos criar com Quarto (Exemplos)
+- Estrutura de um documento em Quarto
+- Próximos passos
+
+::: notes
+**Dizer**:
+
+Você provavelmente não conhece muito sobre o Quarto e a tecnologia que ele representa. Esta apresentação tem como objetivo lhe dar uma introdução ao Quarto, como ele pode ser usado com R para criar relatórios, sites, apresentações como esta, dashboards, etc.
+:::
+
+## O que é quarto? {.title-top-azure background-image="images/horst-quarto-meteor-transparent.png" aria-label="Um meteoro cuja cabeça é o logotipo do Quarto"}
+
+::: attribution
+Arte de [Allison Horst](https://allisonhorst.com/)
+:::
+
+## Quarto^®^ (1)
+
+- É um novo^[Quarto foi anunciado em 2022] sistema de código aberto, para produção de publicações científicas e técnicas, que reutiliza ferramentas abertas existentes
+- Baseado na combinação de descrição (texto) e código (**R**, Python, etc.) para gerar relatórios, livros, sites, dashboards, apresentações (como esta 😄), etc.
+
+## Quarto^®^ (2)
+
+- Aprenda com quase uma década de uso do RMarkdown^[A primeira versão do RMarkdown é de 2014] pela comunidade global de usuários do R.
+- Mantido pela Posit, PBC (anteriormente RStudio, PBC), e com uma grande comunidade ativa de desenvolvedores que contribuem para o seu aprimoramento.
+
+
+## Quarto vs RMarkdown (1)
+
+- Com o RMarkdown você pode fazer relatórios, páginas web e apresentações simples, assim como fazemos no Quarto.
+- Mas para produzir dashboards, livros, artigos científicos, sites (blogs), etc. uma série de pacotes extras precisam ser usados, às vezes combinações de vários deles. **Quarto já tem isso incluso**.
+
+## Quarto vs RMarkdown (2)
+
+- RMarkdown mistura [Markdown](https://en.wikipedia.org/wiki/Markdown) com seções escritas em R, e não é fácil incorporar código em outras linguagens de programação (por exemplo, Python, Julia). **No Quarto, há suporte para utilização de múltiplas linguagens de programação no mesmo documento**.
+- Incluir componentes como diagramas, referências a tabelas ou figuras, entre outros, requer configurações especiais e pacotes secundários no RMarkdown, **não no Quarto, que já possui suporte para todas essas funcionalidades**.
+
+::: notes
+**Dizer**:
+
+Embora o RMarkdown permita muito do que podemos fazer com o Quarto, não precisamos instalar uma série de pacotes extras (com suas dependências) como teríamos que fazer para fazer coisas mais complicadas no RMarkdown.
+:::
+
+## Do RMarkdown para o Quarto
+
+![Quarto simplifica a geração de diversos documentos, sites, artigos científicos, apresentações, dashboards, etc.](images/rmarkdown-quarto.drawio.png)
+
+## Novos características no Quarto
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- Referências cruzadas
+- Design avançado
+- Painéis avançados para distribuições e figuras
+- Diagramas
+- Extensões
+- Gerenciamento de bibliografia
+:::
+
+::: {.column width="50%"}
+- Interatividade
+- Metadados inteligentes (YAML)
+- Publicação em vários formatos
+- Conteúdo condicional
+- Filtros em notebooks
+:::
+
+::::
+
+
+## Objetivos do Quarto
+
+- Melhorar drasticamente o processo de criação e colaboração na produção de conteúdos reproduzíveis: relatórios técnicos, artigos científicos, etc., com base na experiência de desenvolvimento e utilização do RMarkdown.
+- Permitir a utilização do mesmo documento de origem, que pode ser convertido para vários formatos: HTML, PDF, MS Word, ePub, OpenDocument, etc.
+- Incluir outras linguagens de programação dentro do paradigma _**programação literal**_.
+
+## Programação literal (1)
+
+- O termo "Programação Alfabetizada" foi cunhado por [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth) em 1984.
+- Envolve combinar a explicação do funcionamento de um programa, de forma narrativa e utilizando uma linguagem natural, e não apenas a sintaxe formal de uma linguagem de programação.
+- Qualquer forma de comunicação técnica e científica (artigo, pôster, apresentação, relatório), envolve contar uma história para que a mensagem seja inteligível.
+
+## Programação literal (2)
+
+- A programação literal permite escrever, de forma integrada, o código utilizado para o cálculo, de forma a contextualizar e significar os resultados, explicar pressupostos, considerações e decisões da análise.
+- Tudo isto torna o documento criado não só mais compreensível, mas eminentemente reproduzível e replicável.
+
+## O que podemos criar com Quarto?
+
+::: {.panel-tabset}
+
+### Livros
+
+[![](images/screenshot-book.png){height=5in}](https://jjallaire.github.io/hopr/)
+
+### Sites
+
+[![](images/screenshot-website.png){height=5in}](https://quarto.org)
+
+### Artigos
+
+[![](images/screenshot-article.png){height=5in}](https://quarto-journals.github.io/biophysical-journal/)
+
+### Dashboards
+
+[![](images/screenshot-dashboard.png){height=5in}](https://colorado.posit.co/rsc/nz-quakes/quakes.html)
+
+### Apresentações
+
+[![](images/screenshot-exp-design.png)](https://emitanaka.org/slides/toronto2022)
+
+:::
+
+## Como funciona o Quarto?
+
+```{mermaid}
+%% { init: { 'flowchart': { 'curve': 'monotoneX'} } }
+flowchart LR
+    A["📓 Quarto (qmd)"] -->|" R "| B("🧶 knitr")
+    A -->|" Python "| C("📦 jupyter")
+    B --> D["📝 Markdown (md)"]
+    C --> D
+    B --> E("🖼️ png, svg, etc.")
+    C --> E
+    D --> P(["⚙️ pandoc"])
+    E --> P
+    P --> F{{"🔮"}}
+    F --> G["🌐 HTML"]
+    F --> H["📄 PDF"]
+    F --> I["📃 DOCX"]
+    F --> L["📘 EPUB"]
+    F --> M[... y muchos mas]
+    classDef output fill:#f8d568;
+    class G,H,I,L,M output;
+    classDef interm fill:#7cfc00;
+    class B,C,D,E interm;
+    style P fill:#e6e6fa,stroke-width:3px;
+    style A fill:yellow,color:black;
+    style F fill:white,stroke-width:2px,stroke-dasharray:5 5;
+```
+
+## Quarto: Componentes
+
+::::: {.panel-tabset}
+
+### Metadados
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](images/yaml.png){height=5in}
+:::
+
+::: {.column width="50%"}
+- Use [YAML](https://yaml.org/) (Yet Ain't Markup Language), uma linguagem para descrever conteúdo, fácil de editar, entender e ler.
+- No Quarto, descreva os parâmetros do documento e quais formatos de saída serão gerados.
+- Contém também informações sobre autoria, idioma do texto, etc.
+:::
+
+::::
+
+### Blocos de código
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](images/code-chunks.png){height=5in}
+:::
+
+::: {.column width="50%"}
+- Inclui código em R (ou Python, Julia e ObservableJS) para processar dados e gerar resultado, tabela, gráfico, etc.
+- É delimitado por aspas invertidas, indicando o idioma utilizado:
+
+```` markdown
+```r
+# ... código em R
+```
+````
+
+:::
+
+::::
+
+
+### Texto em Markdown
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![](images/markdown-text.png){height=5in}
+:::
+
+::: {.column width="50%"}
+
+[Markdown](https://quarto.org/docs/authoring/markdown-basics.html):
+
+- *Itálico* (`*Itálico*`)
+- **Destacado** (`**Destacado**`)
+- Cabeçalhos:
+ - Primeiro nível (`#H1`)
+ - Segundo nível (`## H2`), etc.
+- Listas (`- Listas`)
+- Equações: $E = mc^{2}$ (`Equações: $E = mc^{2}$`)
+
+:::
+
+::::
+
+:::::
+
+
+## Quarto na prática {.title-top-light background-image="images/horst_penguins_telescope.png" aria-label="Um pinguim nos ombros de outro, em uma paisagem nevada, visto através de um telescópio no logotipo do Quarto como se fosse a lua no firmamento."}
+
+::: attribution
+Arte de [Allison Horst](https://allisonhorst.com/)
+:::
+
+## Um exemplo desenvolvido
+
+- Usaremos os dados do pacote {[palmerpenguins](https://allisonhorst.github.io/palmerpenguins/)}, como base para criar um relatório HTML simples usando Quarto- O documento em Quarto conterá:
+ - Uma breve descrição dos dados
+ - Código para processar os dados
+ - Algumas tabelas de resumo
+ - Dois gráficos: um gráfico de barras e um gráfico de dispersão
+
+## Instalando o Quarto
+
+Baixe e instale o executável em [https://quarto.org/docs/get-started/](https://quarto.org/docs/get-started/)
+![](images/download-quarto.png)
+
+
+## Instalando pacotes no RStudio
+
+Vamos ter certeza de que temos `{tidyverse}` e `{palmerpenguins}` instalados
+```{r eval=FALSE,echo=TRUE}
+install.packages("tidyverse")
+install.packages("palmerpenguins")
+```
+
+## Metadados do documento
+
+```yaml
+---
+title: "Pinguins de Palmer"                # <1>
+subtitle: "Um exemplo de uso do Quarto"    # <1>
+license: CC BY-NC-SA                       # <2>
+author:                                    # <3>
+  - name: Jesus M. Castagnetto, Ph.D.      # <3>
+    orcid: 0000-0002-7188-1605             # <3>  
+    email: jesus@upch.pe                   # <3>
+    affiliation: INSIGHT Project / UPCH    # <3>  
+lang: pt                                   # <4>  
+format:                                    # <5> 
+  html:  # gera HTML
+    code-fold: true # esconde o código
+    self-contained-math: true                
+    embed-resources: true                 
+    toc: true                             
+    execute:  # inclui código em HTML    
+      warning: false                      
+      echo: true 
+
+---
+```
+1. Título e subtítulo
+2. Licença
+3. Autoria
+4. Idioma (portuguese)
+5. Formatos de saída
+
+
+## Carregando bibliotecas e dados
+
+```` markdown
+```r
+# carregamos as bibliotecas que precisamos
+library(tidyverse)
+library(knitr)
+library(palmerpenguins)  # dados
+```
+````
+
+## Adicionando uma introdução
+
+``` markdown
+## Introdução
+
+Este é um exemplo de relatório simples,
+em formato HTML, gerado usando Quarto.
+
+Vamos usar os dados dos pinguins do arquipélago
+de Palmer (Antártica), que eram originalmente
+coletado por **Dr. Kristen Gorman**, como
+parte do *Programa de Pesquisa Ecológica
+Plano de Longo Prazo da Estação Palmer* (LTER:
+Pesquisa Ecológica de Longo Prazo).
+
+```
+
+## Misturando código e texto
+
+Podemos adicionar cálculos e resultados diretamente, junto com o texto, utilizando crases, e indicando a linguagem de programação, conforme mostrado abaixo:
+
+![](images/inline-code-pt.png)
+
+## Como é a introdução
+
+![](images/intro-output-pt.png){height=6in}
+
+## Preparando os dados
+
+```{r eval=FALSE,echo=TRUE}
+esp_sexo <- penguins %>% 
+  group_by(
+    species,
+    sex
+  ) %>% 
+  summarise(
+    total = n(),
+    n_islas = n_distinct(island),
+    prom_long_pico = mean(bill_length_mm, na.rm = TRUE),
+    sd_long_pico = sd(bill_length_mm, na.rm = TRUE),
+    prom_prof_pico = mean(bill_depth_mm, na.rm = TRUE),
+    sd_prof_pico = sd(bill_depth_mm, na.rm = TRUE),
+    prom_long_ala = mean(flipper_length_mm, na.rm = TRUE),
+    sd_long_ala = sd(flipper_length_mm, na.rm = TRUE),
+    prom_peso = mean(body_mass_g, na.rm = TRUE),
+    sd_peso = sd(body_mass_g, na.rm = TRUE)
+  ) %>% 
+  ungroup() %>% 
+  mutate(  # Muda o conteúdo para portuguese
+    sex = case_when(
+        sex == "male" ~ "Masculino",
+        sex == "female" ~ "Femenino",
+        is.na(sex) ~ "Desconhecido"
+      )
+  )
+```
+
+## Dados para tabelas
+
+```{r eval=FALSE,echo=TRUE}
+# Vamos usar mutate() para criar novos
+# colunas no formato que desejamos
+tab_pinguinos <- esp_sexo %>% 
+  mutate(
+    long_pico = paste(
+      round(prom_long_pico, 1),
+      " (",
+      round(sd_long_pico, 1),
+      ")"
+    ),
+    prof_pico = paste(
+      round(prom_prof_pico, 1),
+      " (",
+      round(sd_prof_pico, 1),
+      ")"
+    ),
+    long_ala = paste(
+      round(prom_long_ala, 1),
+      " (",
+      round(sd_long_ala, 1),
+      ")"
+    ),
+    peso = paste(
+      round(prom_peso, 1),
+      " (",
+      round(sd_peso, 1),
+      ")"
+    )
+  ) %>% 
+  select( # seleccionar y renombrar las columnas
+    Especie = species,
+    Sexo = sex,
+    Total = total,
+    Islas = n_islas,
+    "Pico (long)" = long_pico,
+    "Pico (prof)" = prof_pico,
+    Aleta = long_ala,
+    Peso = peso
+  )
+```
+
+
+## Produzindo as tabelas
+
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r eval=FALSE,echo=TRUE}
+# tabela 1
+kable(
+  tab_pinguinos %>% 
+    select(
+      Especie, 
+      Sexo, 
+      Total, 
+      Islas
+    )
+)
+```
+:::
+
+::: {.column width="50%"}
+```{r eval=FALSE,echo=TRUE}
+# tabela 2
+kable(
+  tab_pinguinos %>% 
+    select(
+      -Total, 
+      -Islas
+    )
+)
+```
+:::
+
+::::
+
+
+## As tabelas
+
+![](images/output-tables-pt.png){height=6in}
+
+## Um gráfico de barras
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+```{r echo=TRUE,eval=FALSE}
+ggplot(
+  penguins, 
+  aes(x = species, fill = island)
+) +
+  geom_bar() +
+  labs(
+    title = "Distribuição dos pinguins por cada ilha",
+    x = "Espécie",
+    y = "Frequência",
+    fill = "Ilhas"
+  ) +
+  theme_bw(16) +
+  theme(
+    legend.position = "top"
+  )
+```
+:::
+
+::: {.column width="40%"}
+![](images/barchart-penguins-pt.png)
+:::
+
+::::
+
+## O gráfico de dispersão (pontos)
+
+:::: {.columns}
+
+::: {.column width="60%"}
+
+
+```{r echo=TRUE,eval=FALSE}
+ggplot(
+  penguins,
+  aes(x = bill_length_mm, 
+      y = flipper_length_mm, 
+      color = species)
+) +
+  geom_point() +
+  scale_color_brewer(palette = "Paired") +
+  labs(
+    title = "Relação entre a longitude do pico e a aleta",
+    subtitle = "Pinguins do Palmer",
+    x = "Longitude do pico (en mm)",
+    y = "Longitude da aleta (en mm)",
+    color = "Espécie"
+  ) +
+  theme_classic(16)
+```
+
+:::
+
+::: {.column width="40%"}
+![](images/scatterplot-penguins-pt.png)
+:::
+
+::::
+
+## O documento HTML final
+
+<iframe src="los-pinguinos-de-palmer-pt.html" height="70%" width="90%"></iframe>
+
+## Próximas etapas
+
+- Dia 3:
+  - Apresentação do dashboard baseado no Quarto, criado para uso de cada país.
+  - Detalhes de como o painel funciona e está organizado.
+
+- Dia 4:
+  - Criação de scripts ad-hoc para conversão de dados brutos em dados que sigam o modelo de dados e com conteúdo harmonizado.
+  - Produção de dashboards com base nos dados transformados.
+
+
+## Recursos
+
+- [Página principal do Quarto](https://quarto.org)
+ - [Instalação do Quarto](https://quarto.org/docs/get-started/)
+- [Awesome Quarto (Mickaël Canouil)](https://github.com/mcanouil/awesome-quarto)
+- [Intro to Quarto (Isabella Velásquez)](https://ivelasq.quarto.pub/intro-to-quarto)
+- [Hello Quarto (Mine Cetinkaya-Rundel)](https://mine.quarto.pub/hello-quarto/)
+- [Getting started with Quarto (Tom Mock)](https://rstudio-conf-2022.github.io/get-started-quarto/)

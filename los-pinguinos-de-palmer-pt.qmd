@@ -1,0 +1,216 @@
+---
+title: "Pinguins de Palmer"
+subtitle: "Um exemplo de uso do Quarto"
+license: CC BY-NC-SA
+author:
+  - name: Jesus M. Castagnetto, Ph.D.
+    orcid: 0000-0002-7188-1605
+    email: jesus@upch.pe
+    affiliation: INSIGHT / UPCH
+lang: pt
+
+format: 
+  html:
+    code-fold: true   # mantém o código, mas inicialmente oculto
+    self-contained-math: true
+    embed-resources: true
+    toc: true
+    execute:  # somente para HTML incluímos o código
+      warning: false
+      echo: true
+  docx: 
+    execute:
+      warning: false
+      echo: false
+  epub:
+    execute:
+      warning: false
+      echo: false
+
+---
+
+```{r}
+# carregamos as bibliotecas que precisamos
+library(tidyverse)
+library(knitr)
+library(palmerpenguins)  # dados
+```
+
+## Introdução
+
+Este é um exemplo de relatório simples, em formato HTML, gerado no Quarto.
+
+Usaremos dados de pinguins do Arquipélago Palmer (Antártica), que foram originalmente coletados pelo **Dr. Kristen Gorman**, como parte do *Programa de Pesquisa Ecológica de Longo Prazo* (LTER) da Palmer Station.
+
+Esses dados incluem medidas anatômicas, pesos e outros parâmetros de pinguins adultos das espécies Adélie, Chinstrap e Gentoo, nas áreas próximas à Estação Palmer.
+
+O conjunto de dados está disponível como um pacote R: [palmerpenguins](https://allisonhorst.github.io/palmerpenguins/), através dos esforços de [Allison Horst](https://www.allisonhorst.com/ ), [Alison Hill](https://www.apreshill.com/) e [Kristen Gorman](https://www.uaf.edu/cfos/people/faculty/detail/kristen-gorman.php). Nas seções a seguir usaremos esses dados para ilustrar a criação de uma tabela simples e alguns gráficos.
+
+Abaixo podemos ver um resumo da estrutura de dados:
+
+```{r}
+glimpse(penguins)
+```
+
+Esses dados têm `r ncol(penguins)` colunas e `r nrow(penguins)` registros de pinguins, que foram encontrados em `r length(unique(penguins$island))` ilhas: `r paste(levels(penguins$island), collapse = ", ")`
+
+## Estatísticas de pinguins por espécie e sexo
+
+Vamos criar algumas tabelas resumindo os dados que temos sobre os pinguins, para os quais calcularemos, para cada combinação de espécie e sexo, o número total de indivíduos registados, o número de ilhas em que aparecem, bem como as médias e desvios padrão de: comprimento do bico e nadadeira, profundidade do bico e peso dos pinguins.
+
+```{r}
+esp_sexo <- penguins %>% 
+  group_by(
+    species,
+    sex
+  ) %>% 
+  summarise(
+    total = n(),
+    n_islas = n_distinct(island),
+    prom_long_pico = mean(bill_length_mm, na.rm = TRUE),
+    sd_long_pico = sd(bill_length_mm, na.rm = TRUE),
+    prom_prof_pico = mean(bill_depth_mm, na.rm = TRUE),
+    sd_prof_pico = sd(bill_depth_mm, na.rm = TRUE),
+    prom_long_ala = mean(flipper_length_mm, na.rm = TRUE),
+    sd_long_ala = sd(flipper_length_mm, na.rm = TRUE),
+    prom_peso = mean(body_mass_g, na.rm = TRUE),
+    sd_peso = sd(body_mass_g, na.rm = TRUE)
+  ) %>% 
+  ungroup() %>% 
+  mutate(  # Muda o conteúdo para portuguese
+    sex = case_when(
+        sex == "male" ~ "Masculino",
+        sex == "female" ~ "Femenino",
+        is.na(sex) ~ "Desconhecido"
+      )
+  )
+```
+
+Os dados agregados, vamos organizá-los de forma que possamos criar algumas tabelas:
+
+1. A primeira, mostrando para cada combinação de espécie e sexo, o número de indivíduos e em quantas ilhas eles se encontram.
+2. Um segundo em que as medidas numéricas estão na forma: *média (desvio padrão)*, e todas com uma única precisão decimal.
+
+```{r}
+# Vamos usar mutate() para criar novos
+# colunas no formato que desejamos
+tab_pinguinos <- esp_sexo %>% 
+  mutate(
+    long_pico = paste(
+      round(prom_long_pico, 1),
+      " (",
+      round(sd_long_pico, 1),
+      ")"
+    ),
+    prof_pico = paste(
+      round(prom_prof_pico, 1),
+      " (",
+      round(sd_prof_pico, 1),
+      ")"
+    ),
+    long_ala = paste(
+      round(prom_long_ala, 1),
+      " (",
+      round(sd_long_ala, 1),
+      ")"
+    ),
+    peso = paste(
+      round(prom_peso, 1),
+      " (",
+      round(sd_peso, 1),
+      ")"
+    )
+  ) %>% 
+  select( # seleccionar y renombrar las columnas
+    Especie = species,
+    Sexo = sex,
+    Total = total,
+    Islas = n_islas,
+    "Pico (long)" = long_pico,
+    "Pico (prof)" = prof_pico,
+    Aleta = long_ala,
+    Peso = peso
+  )
+```
+
+Tabela de distribuição por espécie e sexo
+
+```{r}
+# tabela 1
+kable(
+  tab_pinguinos %>% 
+    select(
+      Especie, 
+      Sexo, 
+      Total, 
+      Islas
+    )
+)
+```
+
+E a tabela de distribuição de medidas numéricas
+
+```{r}
+# tabela 2
+kable(
+  tab_pinguinos %>% 
+    select(
+      -Total, 
+      -Islas
+    )
+)
+```
+
+
+## Exemplos de gráficos
+
+Com os dados originais, vamos agora criar alguns gráficos simples, uma barra e um scatter.
+
+### Gráfico de barras
+
+Primeiramente vamos mostrar a distribuição do número de pinguins registrados para cada espécie e ilha. Colorir os segmentos das barras utiliza a ilha em que foram encontrados.
+
+```{r}
+ggplot(
+  penguins, 
+  aes(x = species, fill = island)
+) +
+  geom_bar() +
+  labs(
+    title = "Distribuição dos pinguins por cada ilha",
+    x = "Espécie",
+    y = "Frequência",
+    fill = "Ilhas"
+  ) +
+  theme_bw(16) +
+  theme(
+    legend.position = "top"
+  )
+```
+
+### Gráfico de dispersão
+
+E para o nosso segundo (e último) gráfico, vejamos a correlação entre os comprimentos (em mm) dos bicos e das barbatanas dos pinguins, colorindo cada ponto pela espécie a que pertencem.
+
+Usaremos uma escala de cores que seja amigável para pessoas com daltonismo ("Emparelhado")^[Outras escalas podem ser exploradas em [https://colorbrewer2.org/](https://colorbrewer2.org/)]
+
+```{r}
+ggplot(
+  penguins,
+  aes(x = bill_length_mm, 
+      y = flipper_length_mm, 
+      color = species)
+) +
+  geom_point() +
+  scale_color_brewer(palette = "Paired") +
+  labs(
+    title = "Relação entre a longitude do pico e a aleta",
+    subtitle = "Pinguins do Palmer",
+    x = "Longitude do pico (en mm)",
+    y = "Longitude da aleta (en mm)",
+    color = "Espécie"
+  ) +
+  theme_classic(16)
+```
+
+O gráfico indica que, em geral, os pinguins Gentoo têm as barbatanas e bicos mais longos, os da espécie Adelie têm os mais curtos e os da espécie Chinstrap têm valores intermédios.

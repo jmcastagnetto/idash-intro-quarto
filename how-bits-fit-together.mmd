@@ -1,0 +1,30 @@
+
+flowchart TD
+  subgraph d1[Día 1]
+    s1[(Datos crudos)]
+    s2[[Modelo de datos]]
+    s2a[[Armonización de datos]]
+  end
+  subgraph d4["Día 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"]
+    s3{{"Transformación<br>(Script en R)"}} --> s4[(Datos estructurados)]
+  end
+  subgraph d3["Día 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"]
+    s6(["Código para el dashboard<br>(Quarto + R)"])
+  end
+  s2 -. Determina .-> s2a
+  s1 -. Influencia .-> s2
+  s1 -. Influencia .-> s2a
+  %%s1 == Se usa ==> s3
+  %%s2 == Se usa ==> s3
+  %%s2a == Se usa ==> s3
+  d1 == Se usa ==> s3
+  s4 -. Se pueden<br>publicar<br>como .-> s5[Datos Abiertos]
+  s4 == Genera ==> s6
+  s6 ==> s7(Dashboard)
+  linkStyle 7 stroke:blue;
+  style d3 stroke-width:3px,stroke:green;
+  style s3 fill:#e6e6fa;
+  style s4 fill:lightgreen;
+  style s6 fill:yellow,stroke-width:3px,stroke:green;
+  style s7 fill:darkgreen,color:white;
+  style s5 fill:white,stroke-dasharray:5 5,stroke:blue;
