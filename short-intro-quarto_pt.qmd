@@ -1,12 +1,12 @@
 ---
 title: "Uma introdução ao Quarto"
-date: 2024-08-28
+date: 2025-11-25
 license: CC BY-NC-SA
 author:
   - name: Jesus M. Castagnetto, Ph.D.
     orcid: 0000-0002-7188-1605
     email: jesus@upch.pe
-    affiliation: INSIGHT Project - Universidad Peruana Cayetano Heredia (UPCH)
+    affiliation: IDASH SAM 2025
 format: 
   revealjs: 
     theme: [default, style.scss]
@@ -532,16 +532,6 @@ ggplot(
 ## O documento HTML final
 
 <iframe src="los-pinguinos-de-palmer-pt.html" height="70%" width="90%"></iframe>
-
-## Próximas etapas
-
-- Dia 3:
-  - Apresentação do dashboard baseado no Quarto, criado para uso de cada país.
-  - Detalhes de como o painel funciona e está organizado.
-
-- Dia 4:
-  - Criação de scripts ad-hoc para conversão de dados brutos em dados que sigam o modelo de dados e com conteúdo harmonizado.
-  - Produção de dashboards com base nos dados transformados.
 
 
 ## Recursos
